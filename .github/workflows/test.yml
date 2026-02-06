@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
           # cache: 'npm'
-          # cache-dependency-path: app/${{ matrix.service }}/package-lock.json
+          # cache-dependency-path: apps/${{ matrix.service }}/package-lock.json
       
       - name: Cache NPM dependencies
         id: npm-cache
@@ -36,7 +36,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ matrix.service }}-${{ hashFiles(format('app/{0}/package-lock.json', matrix.service)) }}
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ matrix.service }}-${{ hashFiles(format('apps/{0}/package-lock.json', matrix.service)) }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
@@ -44,17 +44,17 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd app/${{matrix.service}}
+          cd apps/${{matrix.service}}
           npm install
 
       - name: Run Unit Tests
         run: |
-          cd app/${{matrix.service}}
+          cd apps/${{matrix.service}}
           npm test
 
       - name: Run Coverage (if present)
         run: |
-          cd app/${{matrix.service}}
+          cd apps/${{matrix.service}}
           npm run test:coverage --if-present
 
 
