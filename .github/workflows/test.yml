@@ -1,12 +1,12 @@
 name: Pulsedesk CI Tests Workflow
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
       - feature/*
   pull_request:
+  workflow_dispatch:
   
 
 jobs:
