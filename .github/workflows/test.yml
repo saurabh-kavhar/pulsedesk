@@ -75,6 +75,12 @@ jobs:
     name: Containerization
     needs: test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - backend
+          - analytics-service
+          - frontend
 
     steps:
       - name: Checkout Repository
