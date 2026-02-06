@@ -1,0 +1,5 @@
+name: Pulsedesk CI - Tests
+
+on:
+    push:
+        branches: [main]
