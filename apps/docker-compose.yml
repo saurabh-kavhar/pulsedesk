@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./apps/backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE=http://localhost:4000
+    depends_on:
+      - backend
