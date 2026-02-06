@@ -67,7 +67,7 @@ jobs:
           npm audit --audit-level=high
 
       - name: Archive Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Test_Results
           path: cd apps/${{matrix.service}}/results.xml
