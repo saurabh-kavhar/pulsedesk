@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         service: [backend, frontend, analytics-service]
-        node-version: [18, 20, 22]
+        node-version: [18, 20]
 
     steps:
       - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
           cache: 'npm'
-          cache-dependency-path: aap/${{ matrix.service }}/package-lock.json
+          cache-dependency-path: app/${{ matrix.service }}/package-lock.json
 
       - name: Install Dependencies
         run: |
@@ -35,7 +35,7 @@ jobs:
           npm ci
 
       - name: Run Unit Tests
-        if: 
+        if: always()
         run: |
           cd app/${{matrix.service}}
           npm test
