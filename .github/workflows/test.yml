@@ -35,8 +35,8 @@ jobs:
           cache-name: cache-node-modules
         uses: actions/cache@v4
         with:
-          path:
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ matrix.service }}-${{ hashFiles(format('app/{0}/package-lock.json', matrix.service)) }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
@@ -50,10 +50,9 @@ jobs:
       - name: Install Dependencies
         run: |
           cd app/${{matrix.service}}
-          npm install
+          npm ci
 
       - name: Run Unit Tests
-        if: always()
         run: |
           cd app/${{matrix.service}}
           npm test
