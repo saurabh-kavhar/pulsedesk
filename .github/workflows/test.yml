@@ -7,6 +7,7 @@ on:
       - main
       - feature/*
   pull_request:
+  
 
 jobs:
   test:
@@ -58,5 +59,10 @@ jobs:
         run: |
           cd apps/${{matrix.service}}
           npm run test:coverage --if-present
+        
+      - name: NPM Audit
+        continue-on-error: true
+        run: npm audit --audit-level=high
+
 
 
