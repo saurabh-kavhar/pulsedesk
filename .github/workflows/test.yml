@@ -62,7 +62,16 @@ jobs:
         
       - name: NPM Audit
         continue-on-error: true
-        run: npm audit --audit-level=high
+        run: |
+          cd apps/${{matrix.service}}
+          npm audit --audit-level=high
+
+      - name: Archive Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test_Results
+          path: cd apps/${{matrix.service}}/results.xml
+
 
 
 
