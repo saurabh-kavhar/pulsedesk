@@ -1,5 +1,25 @@
-name: Pulsedesk CI - Tests
+name: Pulsedesk CI Tests Workflow
 
 on:
-    push:
-        branches: [main]
+  push:
+    branches:
+      - main
+      - feature/*
+  pull_request:
+
+jobs:
+  test:
+    name: Run tests for all services
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - backend
+          - frontend
+          - analytics-service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
