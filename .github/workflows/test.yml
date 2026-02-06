@@ -1,6 +1,7 @@
 name: Pulsedesk CI Tests Workflow
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -14,12 +15,34 @@ jobs:
 
     strategy:
       matrix:
-        service:
-          - backend
-          - frontend
-          - analytics-service
+        service: [backend, frontend, analytics-service]
+        node-version: [18, 20, 22]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setting up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{matrix.node-version}}
+          cache: 'npm'
+          cache-dependency-path: aap/${{ matrix.service }}/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd app/${{matrix.service}}
+          npm ci
+
+      - name: Run Unit Tests
+        if: 
+        run: |
+          cd app/${{matrix.service}}
+          npm test
+
+      - name: Run Coverage (if present)
+        run: |
+          cd app/${{matrix.service}}
+          npm run test:coverage --if-present
+
 
