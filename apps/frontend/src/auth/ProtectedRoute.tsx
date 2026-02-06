@@ -1,9 +1,15 @@
 import { Navigate } from 'react-router-dom';
+import type { ReactElement } from 'react';
 import { isAuthenticated } from './auth';
 
-export default function ProtectedRoute({ children }: { children: JSX.Element }) {
+type Props = {
+  children: ReactElement;
+};
+
+export default function ProtectedRoute({ children }: Props) {
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
+
   return children;
 }
