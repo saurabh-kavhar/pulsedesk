@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         service: [backend, frontend, analytics-service]
-        node-version: 20
+        node-version: [20]
 
     steps:
       - name: Checkout code
