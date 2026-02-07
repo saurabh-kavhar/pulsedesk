@@ -98,9 +98,9 @@ jobs:
             # sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=latest/" .env.prod
 
             # Login to ECR
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+            aws ecr get-login-password --region \
               | docker login --username AWS --password-stdin \
-              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
             # Pull latest images & restart
             docker compose -f docker-compose.prod.yml --env-file .env.prod pull
