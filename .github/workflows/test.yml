@@ -3,9 +3,10 @@ name: Pulsedesk CI - Tests
 on:
   push:
     branches:
-      - main
       - feature/*
   pull_request:
+    branches:
+      - main
   workflow_dispatch:
   
 
