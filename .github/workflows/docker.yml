@@ -5,6 +5,9 @@ on:
     workflows: [ Pulsedesk CI - Tests ]
     types:
       - completed
+    branches:
+      - main
+      - feature/*
 
 jobs:
   containerization:
