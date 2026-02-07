@@ -2,12 +2,14 @@ name: Pulsedesk CI - Docker Build & Runtime Check
 
 on:
   workflow_run:
-    workflows: [ Pulsedesk CI - Tests ]
+    workflows:
+      - Pulsedesk CI - Tests
     types:
       - completed
     branches:
       - main
       - feature/*
+  workflow_dispatch:
 
 jobs:
   containerization:
