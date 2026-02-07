@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE;
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 export async function fetchBackendHealth() {
   const res = await fetch(`${API_BASE}/health`);
