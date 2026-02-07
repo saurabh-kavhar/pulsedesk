@@ -1,0 +1,79 @@
+name: Pulsedesk CI - Docker Build & Runtime Check
+
+on:
+  workflow_run:
+    workflows:
+      - Pulsedesk CI - Tests
+    types:
+      - completed
+    branches:
+      - main
+      - feature/*
+  workflow_dispatch:
+
+jobs:
+  containerization:
+    name: Containerization
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - backend
+          - analytics-service
+          - frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t pulsedesk-${{ matrix.service }} \
+            ./apps/${{ matrix.service }}
+
+      # ---------------- BACKEND ----------------
+      - name: Run backend container & check /health
+        if: matrix.service == 'backend'
+        run: |
+          docker run -d --rm \
+            -p 4000:4000 \
+            -e PORT=4000 \
+            -e ANALYTICS_URL=http://localhost:5000 \
+            --name backend-test \
+            pulsedesk-backend
+
+          sleep 5
+          curl -f http://localhost:4000/health
+          docker stop backend-test
+
+      # ---------------- ANALYTICS ----------------
+      - name: Run analytics container & check /metrics
+        if: matrix.service == 'analytics-service'
+        run: |
+          docker run -d --rm \
+            -p 5000:5000 \
+            -e PORT=5000 \
+            --name analytics-test \
+            pulsedesk-analytics-service
+
+          sleep 5
+          curl -f http://localhost:5000/metrics
+          docker stop analytics-test
+
+      # ---------------- FRONTEND ----------------
+      - name: Run frontend container & smoke test
+        if: matrix.service == 'frontend'
+        run: |
+          docker run -d --rm \
+            -p 5173:5173 \
+            --name frontend-test \
+            pulsedesk-frontend
+
+          sleep 5
+          curl -f http://localhost:5173
+          docker stop frontend-test
